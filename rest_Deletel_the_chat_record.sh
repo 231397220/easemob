@@ -26,10 +26,10 @@ echo $LOG_TOKEN
 echo "token ok!"
 
 num=1
-YESTERDAY=$(date +%Y-%m-%d --date="-1 day")
-TODAY=$(date +%Y-%m-%d)
-YES_TIME=$(date -d "$YESTERDAY 0:00:00" +%s)000
-TOD_TIME=$(date -d "$TODAY 0:00:00" +%s)000
+THREE_DAY_AGO=$(date +%Y-%m-%d --date="-3 day")
+#TODAY=$(date +%Y-%m-%d)
+TDA_TIME=$(date -d "$THREE_DAY_AGO 0:00:00" +%s)000
+#TOD_TIME=$(date -d "$TODAY 0:00:00" +%s)000
 echo time ok!
 
 
@@ -46,11 +46,11 @@ if [ -z "$CURSOR" -o -z "$num" ]; then
    exit 1
 fi
 echo "CURSOR=${CURSOR} num=${num}"
-      curl -X GET -i -o message_export_${num}.bak -H "Authorization: Bearer $LOG_TOKEN" "$REST_SER/$APPKEY/chatmessages?ql=select+*+where+timestamp>$YES_TIME+and+timestamp<$TOD_TIME&limit=1000&cursor=$CURSOR"
-echo "To Complete the message log output for message_export_${num}.bak "
+   curl -X DELETE -i -o message_delete_${num}.bak -H "Authorization: Bearer $LOG_TOKEN" "$REST_SER/$APPKEY/chatmessages?ql=select+*+where+timestamp<$TDA_TIME&limit=1000&cursor=$CURSOR"
+echo "To Complete the message log output for message_delete_${num}.bak "
 sleep 1
-     CURSOR=$(tail -n 5 message_export_${num}.bak |grep cursor|cut -d '"' -f 4)
-     echo "Finishded vars_CC"
+     CURSOR=$(tail -n 5 message_delete_${num}.bak |grep cursor|cut -d '"' -f 4)
+     echo "update vars_cursor"
 
      if [ -z "$CURSOR" ]; then
        echo "Finished"
@@ -65,14 +65,12 @@ echo "Finished num++  num=${num}"
 
 
 
-  curl -X GET -i -o message_export_1.bak -H "Authorization: Bearer $LOG_TOKEN" "$REST_SER/$APPKEY/chatmessages?ql=select+*+where+timestamp>$YES_TIME+and+timestamp<$TOD_TIME&limit=1000"
+ curl -X DELETE -i -o message_delete_1.bak -H "Authorization: Bearer $LOG_TOKEN" "$REST_SER/$APPKEY/chatmessages?ql=select+*+where+timestamp<$TDA_TIME&limit=1000"
 ##
-echo "To Complete the message log output for message_export_${num}.bak "
-  CURSOR=$(tail -n 5 message_export_${num}.bak |grep cursor|cut -d '"' -f 4)
+echo "To Complete the message log output for message_delete_${num}.bak "
+  CURSOR=$(tail -n 5 message_delete_${num}.bak |grep cursor|cut -d '"' -f 4)
 echo $CURSOR
-  COUNT=$(tail -n 3 message_export_${num}.bak |grep count|cut -d ':' -f 2)
-  echo $COUNT
-  echo "Finished vars_CC"
+  echo "update vars_cursor"
 
   if [ -z "$CURSOR" ]; then
     echo "Finished"
@@ -82,5 +80,3 @@ echo $CURSOR
      echo "num=${num}"
      check_message  $CURSOR $num
   fi
-
-
