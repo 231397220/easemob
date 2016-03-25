@@ -1,6 +1,10 @@
 #!/bin/bash
-##Using the REST command fetch chat log
-##sam@easemob.com
+##Using the REST command modify the message log
+##E-mail:sam@easemob.com
+##请使用下方脚本内容前,进行全面的测试.
+##免责声明:脚本内容只供学习.使用下方脚本内容造成的系统问题,数据丢失等故障,脚本提供者不承担任何责任.
+##版权所有@环信
+##注意:使用下方脚本内容所造成的系统问题均有使用人承担.
 pidpath=/tmp/rest_etcr.pid
 if [ -f "$pidpath" ]
   then
@@ -10,10 +14,10 @@ fi
 echo $$ >$pidpath
 echo "PID=$$"
 
-LOG_USER=zdou
-LOG_PW=123456
+LOG_USER=username
+LOG_PW=password
 APPKEY=easemob-demo/easemobchat1
-REST_SER=http://10.124.49.6:8080
+REST_SER=http://rest_api:8080
 echo "var ok!"
 echo $APPKEY
 
@@ -33,11 +37,8 @@ TOD_TIME=$(date -d "$TODAY 0:00:00" +%s)000
 echo time ok!
 
 
-
-
   function check_message() {
 echo "function begin "
-#echo 1=${$1}  2=${$2}
 echo "arg1 is $1 and arg2 is $2"
       CURSOR=$1
       num=$2
@@ -50,16 +51,16 @@ echo "CURSOR=${CURSOR} num=${num}"
 echo "To Complete the message log output for message_export_${num}.bak "
 sleep 1
      CURSOR=$(tail -n 5 message_export_${num}.bak |grep cursor|cut -d '"' -f 4)
-     echo "Finishded vars_CC"
+echo "update vars_cursor"
 
      if [ -z "$CURSOR" ]; then
        echo "Finished"
        exit 0
      else
       let num++
-echo "Finished num++  num=${num}"
+echo "For the num=${num} run."
        check_message $CURSOR $num
-       echo "invoke check_message function with parameter 1 is $CURSOR and parater 2 is $num"
+echo "invoke check_message function with parameter 1 is $CURSOR and parater 2 is $num"
     fi
   }
 
@@ -71,8 +72,8 @@ echo "To Complete the message log output for message_export_${num}.bak "
   CURSOR=$(tail -n 5 message_export_${num}.bak |grep cursor|cut -d '"' -f 4)
 echo $CURSOR
   COUNT=$(tail -n 3 message_export_${num}.bak |grep count|cut -d ':' -f 2)
-  echo $COUNT
-  echo "Finished vars_CC"
+echo $COUNT
+echo "update vars_cursor"
 
   if [ -z "$CURSOR" ]; then
     echo "Finished"
