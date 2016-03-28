@@ -18,6 +18,7 @@ LOG_USER=username
 LOG_PW=password
 APPKEY=easemob-demo/easemobchat1
 REST_SER=http://rest_api:8080
+LIMIT=1000
 echo "var ok!"
 echo $APPKEY
 
@@ -47,7 +48,7 @@ if [ -z "$CURSOR" -o -z "$num" ]; then
    exit 1
 fi
 echo "CURSOR=${CURSOR} num=${num}"
-      curl -X GET -i -o message_export_${num}.bak -H "Authorization: Bearer $LOG_TOKEN" "$REST_SER/$APPKEY/chatmessages?ql=select+*+where+timestamp>$YES_TIME+and+timestamp<$TOD_TIME&limit=1000&cursor=$CURSOR"
+      curl -X GET -i -o message_export_${num}.bak -H "Authorization: Bearer $LOG_TOKEN" "$REST_SER/$APPKEY/chatmessages?ql=select+*+where+timestamp>$YES_TIME+and+timestamp<$TOD_TIME&limit=$LIMIT&cursor=$CURSOR"
 echo "To Complete the message log output for message_export_${num}.bak "
 sleep 1
      CURSOR=$(tail -n 5 message_export_${num}.bak |grep cursor|cut -d '"' -f 4)
@@ -66,7 +67,7 @@ echo "invoke check_message function with parameter 1 is $CURSOR and parater 2 is
 
 
 
-  curl -X GET -i -o message_export_1.bak -H "Authorization: Bearer $LOG_TOKEN" "$REST_SER/$APPKEY/chatmessages?ql=select+*+where+timestamp>$YES_TIME+and+timestamp<$TOD_TIME&limit=1000"
+  curl -X GET -i -o message_export_1.bak -H "Authorization: Bearer $LOG_TOKEN" "$REST_SER/$APPKEY/chatmessages?ql=select+*+where+timestamp>$YES_TIME+and+timestamp<$TOD_TIME&limit=$LIMIT"
 ##
 echo "To Complete the message log output for message_export_${num}.bak "
   CURSOR=$(tail -n 5 message_export_${num}.bak |grep cursor|cut -d '"' -f 4)
