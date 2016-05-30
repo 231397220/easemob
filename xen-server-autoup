@@ -1,0 +1,19 @@
+#! /bin/bash
+#! /opt/xensource/bin
+##xenserver6.5 没有选线可以设置自动随机启动,故出此脚本.
+##需要输入服务器名称,并观察最后返回结果,是否存在"other-config (MRW): auto_poweron: true; "
+##脚本作者231397220@qq.com
+
+
+echo -n "Please enter a server name to start automatically:"
+read -a SERVERNAME
+echo "Get server name is $SERVERNAME"
+
+UUID=$(xe vm-list | grep $SERVERNAME -B 1 | cut -d : -f 2 | grep -v $SERVERNAME | sed s/[[:space:]]//g)
+
+echo "Get $SERVERNAME uuid , is $UUID"
+
+xe vm-param-set uuid=$UUID other-config:auto_poweron=true
+
+echo "Check whether the automatic start setting success"
+echo `xe vm-param-list uuid=$UUID | grep auto_poweron`
