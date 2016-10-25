@@ -13,14 +13,21 @@ if [ -f "$pidpath" ]
 fi
 echo $$ >$pidpath
 echo "PID=$$"
-
+#===========Var start=================
 LOG_USER=username
 LOG_PW=password
 APPKEY=easemob-demo/easemobchat1
 REST_SER=http://rest_api:8080
 LIMIT=1000
+SAVE_DAY=3
+num=1
+DAY_AGO=$(date +%Y-%m-%d --date="-$SAVE_DAY day")
+TDA_TIME=$(date -d "$DAY_AGO 0:00:00" +%s)000
+echo time ok!
 echo "var ok!"
 echo $APPKEY
+#============Var end========
+
 
 
 curl -X POST -i -s -o token "$REST_SER/management/token" -d '{"grant_type":"password","username":"'$LOG_USER'","password":"'$LOG_PW'"}'
@@ -30,10 +37,6 @@ LOG_TOKEN=$(cat token | grep access_token | cut -d '"' -f 4)
 echo $LOG_TOKEN
 echo "token ok!"
 
-num=1
-THREE_DAY_AGO=$(date +%Y-%m-%d --date="-3 day")
-TDA_TIME=$(date -d "$THREE_DAY_AGO 0:00:00" +%s)000
-echo time ok!
 
 
 
