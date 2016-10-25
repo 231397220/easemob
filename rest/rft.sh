@@ -6,8 +6,8 @@ Passwd='1'
 UserName=usertest1
 TestToken=YWMtyz9OtpnmEeaz0B943PKl5QAAAVkrsMGD9S9D0S9yZ0yIajGrENJzP0m-oIM
 #---local vars for module token---
-UserNameToken='admin'
-UserNamePass='Easemob2015'
+UserNameToken=''
+UserNamePass=''
 #---local vars for module token---
 UserNameToken='admin'
 UserNamePass='Easemob2015'
